@@ -36,8 +36,8 @@ def jira_config():
     return JiraConfig(
         server=constants.TEST_JIRA_SERVER,
         project_key=constants.TEST_JIRA_PROJECT_KEY,
-        github_issue_url_field_id="github_issue_url",
-        jirahub_metadata_field_id="jirahub_metadata",
+        github_issue_url_field_id="customfield_14001",
+        jirahub_metadata_field_id="customfield_14002",
     )
 
 

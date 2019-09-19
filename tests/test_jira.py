@@ -102,7 +102,7 @@ class TestClient:
         raw_jira_issue = mock_jira.create_issue(
             project=constants.TEST_JIRA_PROJECT_KEY,
             summary="Test issue",
-            github_issue_url=f"https://github.com/testing/test-repo/issues/{github_issue.issue_id}",
+            customfield_14001=f"https://github.com/testing/test-repo/issues/{github_issue.issue_id}",
         )
 
         result = client.find_other_issue(github_issue)
@@ -111,7 +111,7 @@ class TestClient:
         mock_jira.create_issue(
             project=constants.TEST_JIRA_PROJECT_KEY,
             summary="Test issue",
-            github_issue_url=f"https://github.com/testing/test-repo/issues/{github_issue.issue_id}",
+            customfield_14001=f"https://github.com/testing/test-repo/issues/{github_issue.issue_id}",
         )
 
         with pytest.raises(RuntimeError):
@@ -171,9 +171,9 @@ class TestClient:
         assert raw_issue.fields.priority.name == "Critical"
         assert raw_issue.fields.issuetype.name == "Task"
         assert raw_issue.fields.status.name == constants.TEST_JIRA_DEFAULT_STATUS
-        assert raw_issue.fields.github_issue_url == "https://github.com/testing/test-repo/issues/451"
+        assert raw_issue.fields.customfield_14001 == "https://github.com/testing/test-repo/issues/451"
 
-        metadata_json = raw_issue.fields.jirahub_metadata
+        metadata_json = raw_issue.fields.customfield_14002
         metadata = json.loads(metadata_json)
         assert len(metadata["comments"]) == 1
         assert metadata["comments"][0]["jira_comment_id"] == 18
@@ -193,7 +193,7 @@ class TestClient:
         assert raw_issue.fields.summary == "Test issue"
 
     def test_create_issue_custom_field(self, client, mock_jira):
-        result = client.create_issue({"title": "Test issue", "custom_field": "custom value"})
+        result = client.create_issue({"title": "Test issue", "customfield_14003": "custom value"})
 
         assert result.title == "Test issue"
         assert result.priority == constants.TEST_JIRA_DEFAULT_PRIORITY
@@ -203,7 +203,7 @@ class TestClient:
         assert len(mock_jira.issues) == 1
         raw_issue = mock_jira.issues[0]
 
-        assert raw_issue.fields.custom_field == "custom value"
+        assert raw_issue.fields.customfield_14003 == "custom value"
 
     def test_update_issue(self, client, mock_jira):
         raw_issue = mock_jira.create_issue(project=constants.TEST_JIRA_PROJECT_KEY, summary="Test issue")

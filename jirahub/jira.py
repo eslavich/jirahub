@@ -390,7 +390,8 @@ class Client:
 
         if github_issue_url:
             quoted_url = self._quote_query_string(github_issue_url)
-            filters.append(f"{self._config.jira.github_issue_url_field_id} = {quoted_url}")
+            field_id = self._config.jira.github_issue_url_field_id.split("_")[-1]
+            filters.append(f"cf[{field_id}] = {quoted_url}")
 
         return " and ".join(filters) + " order by updated asc"
 

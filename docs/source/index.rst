@@ -90,6 +90,8 @@ These are parameters particular to JIRA.  The ``server`` and ``project_key`` att
        default for new issues.
    * - c.jira.max_retries
      - Maximum number of retries on request failure
+   * - c.jira.notify_watchers
+     - Set to ``False`` to prevent notifications on issue update.  Requires JIRA project admin permissions.
    * - c.jira.sync_comments
      - Set to ``True`` if JIRA comments should be created from GitHub comments
    * - c.jira.sync_status

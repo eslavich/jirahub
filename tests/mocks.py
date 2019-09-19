@@ -172,10 +172,10 @@ class MockJIRAIssueFields:
     )
     created: str = field(default_factory=_jira_now)
     updated: str = field(default_factory=_jira_now)
-    github_issue_url: str = None
-    jirahub_metadata: str = None
+    customfield_14001: str = None
+    customfield_14002: str = None
     project: MockJIRAProject = field(default_factory=lambda: MockJIRAProject())
-    custom_field: str = None
+    customfield_14003: str = None
 
 
 @dataclass
@@ -264,7 +264,7 @@ class MockJIRA:
     ]
 
     UPDATED_RE = re.compile(r"\bupdated > ([0-9]+)\b")
-    ISSUE_URL_RE = re.compile(r"\bgithub_issue_url = '(.*?)'")
+    ISSUE_URL_RE = re.compile(r"\bcf\[\] = '(.*?)'")
 
     valid_servers = []
     valid_basic_auths = []

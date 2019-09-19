@@ -120,6 +120,8 @@ _REQUIRED_PARAMETERS = {
     ("github.repository", "GitHub repository"),
 }
 
+_CUSTOM_FIELD_RE = re.compile(r"customfield_[0-9]+")
+
 
 def validate_config(config):
     for param, description in _REQUIRED_PARAMETERS:
@@ -127,4 +129,10 @@ def validate_config(config):
         for part in param.split("."):
             value = getattr(value, part)
         if not value:
-            raise RuntimeError(f"Missing {description}, please set c.{param} in your config file")
+            raise ValueError(f"Missing {description}, please set c.{param} in your config file")
+
+    if not _CUSTOM_FIELD_RE.match(config.jira.github_issue_url_field_id):
+        raise ValueError("c.jira.github_issue_url_field_id must be in the format customfield_#####")
+
+    if not _CUSTOM_FIELD_RE.match(config.jira.jirahub_metadata_field_id):
+        raise ValueError("c.jira.jirahub_metadata_field_id must be in the format customfield_#####")

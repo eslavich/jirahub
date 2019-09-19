@@ -16,8 +16,8 @@ def test_load_config_minimal():
 
     assert config.jira.server == "https://test.jira.server"
     assert config.jira.project_key == "TEST"
-    assert config.jira.github_issue_url_field_id == "github_issue_url"
-    assert config.jira.jirahub_metadata_field_id == "jirahub_metadata"
+    assert config.jira.github_issue_url_field_id == "customfield_14001"
+    assert config.jira.jirahub_metadata_field_id == "customfield_14002"
     assert config.jira.closed_statuses == ["closed"]
     assert config.jira.close_status == "Closed"
     assert config.jira.reopen_status == "Reopened"
@@ -54,8 +54,8 @@ def test_load_config_full():
 
     assert config.jira.server == "https://test.jira.server"
     assert config.jira.project_key == "TEST"
-    assert config.jira.github_issue_url_field_id == "custom_github_issue_url"
-    assert config.jira.jirahub_metadata_field_id == "custom_jirahub_metadata"
+    assert config.jira.github_issue_url_field_id == "customfield_14001"
+    assert config.jira.jirahub_metadata_field_id == "customfield_14002"
     assert config.jira.closed_statuses == ["Closed", "Done"]
     assert config.jira.close_status == "Done"
     assert config.jira.reopen_status == "Ready"
@@ -107,7 +107,7 @@ def test_load_config_missing_file():
 
 
 def test_load_config_incomplete():
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ValueError):
         load_config(CONFIG_PATH / "incomplete_config.py")
 
 
@@ -127,8 +127,18 @@ def test_validate_config(config):
         invalid_config = copy.deepcopy(config)
         parts = param.split(".")
         setattr(getattr(invalid_config, parts[0]), parts[1], None)
-        with pytest.raises(RuntimeError):
+        with pytest.raises(ValueError):
             validate_config(invalid_config)
+
+    invalid_config = copy.deepcopy(config)
+    invalid_config.jira.github_issue_url_field_id = "GitHub Issue URL"
+    with pytest.raises(ValueError):
+        validate_config(invalid_config)
+
+    invalid_config = copy.deepcopy(config)
+    invalid_config.jira.jirahub_metadata_field_id = "Jirahub Metadata"
+    with pytest.raises(ValueError):
+        validate_config(invalid_config)
 
 
 class TestJirahubConfig:

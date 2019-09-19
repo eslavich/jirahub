@@ -90,3 +90,13 @@ def test_main_sync_missing_config(monkeypatch):
 def test_main_sync_failure(monkeypatch):
     monkey_patch_args(monkeypatch, ["jirahub", "sync", str(BAD_CONFIG_PATH)])
     assert command_line.main() == 1
+
+
+def test_main_sync_exception(monkeypatch):
+    monkey_patch_args(monkeypatch, ["jirahub", "sync", str(CONFIG_PATH)])
+
+    def broken_perform_sync(*args, **kwargs):
+        raise Exception("nope")
+
+    monkeypatch.setattr(command_line.IssueSync, "perform_sync", broken_perform_sync)
+    assert command_line.main() == 1
