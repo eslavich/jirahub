@@ -342,7 +342,9 @@ class IssueSync:
 
         fields["title"] = self.make_mirror_issue_title(source_issue)
         fields["body"] = self.make_mirror_issue_body(source_issue)
-        fields["issue_type"] = _DEFAULT_ISSUE_TYPE
+
+        if mirror_source == Source.JIRA:
+            fields["issue_type"] = _DEFAULT_ISSUE_TYPE
 
         if self.sync_feature_enabled(mirror_source, SyncFeature.SYNC_LABELS):
             fields["labels"] = source_issue.labels.copy()

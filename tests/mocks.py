@@ -49,6 +49,10 @@ def next_comment_id():
 next_comment_id._next_id = 1
 
 
+def next_jira_comment_id():
+    return str(next_comment_id())
+
+
 _JIRA_TZ = timezone(timedelta(hours=-4))
 
 
@@ -130,7 +134,7 @@ class MockJIRAComment:
     body: str
     issue_key: str
     jira: Any
-    id: int = field(default_factory=next_comment_id)
+    id: str = field(default_factory=next_jira_comment_id)
     author: MockJIRAUser = field(default_factory=_bot_jira_user)
     created: str = field(default_factory=_jira_now)
     updated: str = field(default_factory=_jira_now)

@@ -58,7 +58,8 @@ class _IssueMapper:
         if body is None:
             body = ""
 
-        comment_id = raw_comment.id
+        # JIRA comment id comes in as a string
+        comment_id = int(raw_comment.id)
 
         created_at = _parse_datetime(raw_comment.created)
         updated_at = _parse_datetime(raw_comment.updated)
