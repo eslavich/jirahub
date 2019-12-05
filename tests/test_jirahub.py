@@ -245,6 +245,44 @@ class TestIssueSync:
         assert_client_activity(github_client, comment_deletes=1)
         assert_client_activity(jira_client, issue_updates=1)
 
+    def test_perform_sync_tracking_comment(
+        self, issue_sync, issue_sync_dry_run, config, github_client, jira_client, create_issue, create_comment
+    ):
+        enable_issue_filter(config, Source.JIRA)
+        config.github.create_tracking_comments = True
+
+        github_issue = create_issue(Source.GITHUB)
+        github_client.issues = [github_issue]
+
+        issue_sync_dry_run.perform_sync()
+        assert_client_activity(github_client)
+        assert_client_activity(jira_client)
+
+        issue_sync.perform_sync()
+        assert_client_activity(github_client, comment_creates=1)
+        assert_client_activity(jira_client, issue_creates=1, issue_updates=1)
+        tracking_comment = github_client.issues[0].comments[0]
+        jira_issue = jira_client.issues[0]
+        assert jira_issue.issue_id in tracking_comment.body
+        assert jira_issue.metadata.tracking_comment_id == tracking_comment.comment_id
+
+        jira_client.reset_stats()
+        github_client.reset_stats()
+
+        tracking_comment.__dict__["body"] = "Old tracking comment format."
+
+        issue_sync_dry_run.perform_sync()
+        assert_client_activity(github_client)
+        assert_client_activity(jira_client)
+
+        issue_sync.perform_sync()
+        assert_client_activity(github_client, comment_updates=1)
+        assert_client_activity(jira_client)
+        tracking_comment = github_client.issues[0].comments[0]
+        jira_issue = jira_client.issues[0]
+        assert jira_issue.issue_id in tracking_comment.body
+        assert jira_issue.metadata.tracking_comment_id == tracking_comment.comment_id
+
     def test_perform_sync_min_updated_at(self, issue_sync, config, github_client, jira_client, create_issue):
         for source in Source:
             enable_issue_filter(config, source)

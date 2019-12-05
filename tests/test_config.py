@@ -41,6 +41,7 @@ def test_load_config_minimal():
     assert config.github.sync_status is False
     assert config.github.sync_labels is False
     assert config.github.sync_milestones is False
+    assert config.github.create_tracking_comments is False
     assert config.github.redact_patterns == []
     assert config.github.issue_title_formatter is None
     assert config.github.issue_body_formatter is None
@@ -79,6 +80,7 @@ def test_load_config_full():
     assert config.github.sync_status is True
     assert config.github.sync_labels is True
     assert config.github.sync_milestones is True
+    assert config.github.create_tracking_comments is True
     assert config.github.redact_patterns == [re.compile(r"(?<=secret JIRA data: ).+?\b")]
     assert callable(config.github.issue_title_formatter)
     assert callable(config.github.issue_body_formatter)

@@ -35,6 +35,7 @@ c.github.sync_comments = True
 c.github.sync_status = True
 c.github.sync_labels = True
 c.github.sync_milestones = True
+c.github.create_tracking_comments = True
 c.github.issue_title_formatter = lambda issue, title: "From JIRA: " + title
 c.github.issue_body_formatter = lambda issue, body: "Check out this great JIRA issue:\n\n" + body
 c.github.comment_body_formatter = lambda issue, comment, body: "Check out this great JIRA comment:\n\n" + body
