@@ -143,6 +143,8 @@ These are parameters particular to GitHub.  The ``repository`` parameter is requ
      - Set to ``True`` if the GitHub issue's labels should match JIRA's labels
    * - c.github.sync_milestones
      - Set to ``True`` if the GitHub issue's fixVersions field should match JIRA's milestone
+   * - c.github.create_tracking_comments
+     - Set to ``True`` to create comments with links back to JIRA on GitHub source issues
    * - c.github.redact_patterns
      - List of ``re.Pattern`` whose matches will be redacted from issue titles,
        issue bodies, and comment bodies copied over from JIRA

@@ -102,6 +102,9 @@ c.github.repository =
 # Copy JIRA's fixVersions field to GitHub's milestone
 #c.github.sync_milestones = False
 
+# Create comments on GitHub source issues with links back to JIRA
+#c.github.create_tracking_comments
+
 # Regular expressions whose matches will be redacted from issue titles,
 # issue bodies, or comment bodies copied over from JIRA.
 # Must be instances of re.Pattern.
